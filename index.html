@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مراجعة القدرات اللفظية - الثانوية التاسعة والعشرون بالمدينة المنورة</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN for Interactive Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#16a34a',
+                            600: '#15803d',
+                            700: '#15803d',
+                            800: '#166534',
+                            primary: '#0d9488',
+                            secondary: '#6366f1',
+                            accent: '#f59e0b'
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        }
+        .option-btn {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .option-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        /* Printable styles */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            body {
+                background: white;
+            }
+            .glass-card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased p-3 md:p-6 flex flex-col justify-between">
+
+    <!-- Header Section -->
+    <header class="max-w-4xl mx-auto w-full mb-6">
+        <div class="glass-card rounded-2xl p-5 border-t-4 border-teal-600 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-teal-600 to-indigo-600 flex items-center justify-center text-white text-2xl shadow-lg">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <span class="inline-block px-3 py-1 bg-teal-100 text-teal-800 text-xs font-bold rounded-full mb-1">
+                        خطة تحسين نواتج التعلم • الأسبوع 10
+                    </span>
+                    <h1 class="text-xl md:text-2xl font-black text-slate-800">مراجعة القدرات اللفظية الشاملة</h1>
+                    <p class="text-sm text-slate-500 font-semibold">الثانوية التاسعة والعشرون بالمدينة المنورة</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3 no-print">
+                <div class="bg-slate-100 px-4 py-2 rounded-xl text-center border border-slate-200">
+                    <span class="text-xs text-slate-500 block font-bold">الوقت المنقضي</span>
+                    <span id="timer-display" class="font-mono font-bold text-lg text-indigo-700">00:00</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto w-full flex-grow">
+
+        <!-- Welcome & Student Registration Card -->
+        <div id="start-screen" class="glass-card rounded-2xl p-6 md:p-8 text-center space-y-6">
+            <div class="max-w-md mx-auto space-y-4">
+                <div class="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto text-3xl mb-2">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800">أهلاً بكِ في المراجعة التفاعلية</h2>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    تستهدف هذه المراجعة قياس وتثبيت المهارات الأساسية في القسم اللفظي (التناظر اللفظي، إكمال الجمل، الخطأ السياقي، والمفردة الشاذة) المستخرجة من بنك الأسئلة المعتمد.
+                </p>
+
+                <div class="text-right space-y-2 pt-2">
+                    <label class="block text-xs font-bold text-slate-700">اسم الطالبة (ثلاثي):</label>
+                    <input type="text" id="student-name" placeholder="أدخلي اسمكِ الثلاثي..." 
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none text-slate-800 text-sm font-semibold transition">
+                    <p id="name-error" class="text-red-500 text-xs hidden font-bold">يرجى كتابة الاسم للبدء بالمراجعة.</p>
+                </div>
+
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-right text-xs text-amber-800 space-y-1">
+                    <div class="font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-circle-info text-amber-600"></i> تعليمات المهمة:
+                    </div>
+                    <ul class="list-disc list-inside space-y-1 pr-2">
+                        <li>التطبيق يحتوي على 10 أسئلة متنوعة من بنك الأسئلة الحديث.</li>
+                        <li>ستشاهدين التفسير والتصحيح الفوري بعد اختيار كل إجابة.</li>
+                        <li>يتم حساب الوقت بدقة لتدريبكِ على السرعة والتركيز.</li>
+                    </ul>
+                </div>
+
+                <button onclick="startQuiz()" 
+                    class="w-full bg-gradient-to-r from-teal-600 to-indigo-600 hover:from-teal-700 hover:to-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg transition duration-200 flex items-center justify-center gap-2 text-base">
+                    <span>البدء بالمراجعة الآن</span>
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden space-y-6">
+
+            <!-- Progress Bar -->
+            <div class="glass-card rounded-2xl p-4">
+                <div class="flex justify-between items-center text-xs font-bold text-slate-600 mb-2">
+                    <span id="question-tracker">السؤال 1 من 10</span>
+                    <span id="category-badge" class="px-2.5 py-1 bg-indigo-100 text-indigo-700 rounded-lg">التناظر اللفظي</span>
+                </div>
+                <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="bg-gradient-to-r from-teal-500 to-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 10%"></div>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="glass-card rounded-2xl p-6 md:p-8 space-y-6 relative overflow-hidden">
+                <!-- Question Header / Stem -->
+                <div>
+                    <span class="text-xs font-bold text-teal-600 uppercase tracking-wider block mb-1">نص السؤال</span>
+                    <h3 id="question-text" class="text-lg md:text-xl font-bold text-slate-800 leading-relaxed">
+                        جاري تحميل السؤال...
+                    </h3>
+                </div>
+
+                <!-- Options List -->
+                <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <!-- Options injected dynamically -->
+                </div>
+
+                <!-- Explanation Box (Initially Hidden) -->
+                <div id="explanation-box" class="hidden rounded-xl p-4 border text-sm transition-all duration-300 space-y-2">
+                    <div class="flex items-center gap-2 font-bold" id="explanation-title">
+                        <i id="explanation-icon" class="fa-solid"></i>
+                        <span id="explanation-header">التفسير والتبرير</span>
+                    </div>
+                    <p id="explanation-text" class="text-slate-700 leading-relaxed text-xs md:text-sm"></p>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex justify-between items-center pt-4 border-t border-slate-100">
+                    <div class="text-xs font-semibold text-slate-500">
+                        الدرجة الحالية: <span id="current-score" class="font-bold text-teal-700">0</span>
+                    </div>
+                    <button id="next-btn" onclick="nextQuestion()" disabled
+                        class="bg-slate-300 text-slate-500 cursor-not-allowed font-bold py-2.5 px-6 rounded-xl transition duration-200 flex items-center gap-2 text-sm">
+                        <span>السؤال التالي</span>
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden space-y-6">
+            <div class="glass-card rounded-2xl p-6 md:p-8 text-center space-y-6">
+                
+                <!-- Report Header for Print -->
+                <div class="border-b pb-4 text-right">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="text-xl font-black text-slate-800">تقرير نتيجة مراجعة القدرات اللفظية</h2>
+                            <p class="text-xs text-slate-500">المرحلة الثانوية • الثانوية التاسعة والعشرون بالمدينة المنورة</p>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-xs text-slate-400 block">التاريخ</span>
+                            <span id="report-date" class="text-xs font-bold text-slate-700"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Summary Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-4 bg-teal-50 border border-teal-100 rounded-xl">
+                        <span class="text-xs font-bold text-teal-600 block mb-1">اسم الطالبة</span>
+                        <span id="res-student-name" class="font-bold text-slate-800 text-base">---</span>
+                    </div>
+                    <div class="p-4 bg-indigo-50 border border-indigo-100 rounded-xl">
+                        <span class="text-xs font-bold text-indigo-600 block mb-1">الدرجة الكلية</span>
+                        <span id="res-score" class="font-black text-indigo-800 text-2xl">0 / 10</span>
+                    </div>
+                    <div class="p-4 bg-amber-50 border border-amber-100 rounded-xl">
+                        <span class="text-xs font-bold text-amber-600 block mb-1">الوقت المستغرق</span>
+                        <span id="res-time" class="font-bold text-amber-800 text-base">00:00</span>
+                    </div>
+                </div>
+
+                <!-- Chart & Feedback Section -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center pt-2">
+                    <!-- Chart -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h4 class="text-xs font-bold text-slate-600 mb-3 text-right">تحليل الأداء حسب مهارات القسم اللفظي:</h4>
+                        <div class="h-56 relative flex items-center justify-center">
+                            <canvas id="skillsChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- Detailed Assessment & Recommendation -->
+                    <div class="text-right space-y-3">
+                        <h4 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-award text-amber-500"></i> التقييم والتوصية التربوية:
+                        </h4>
+                        <div id="evaluation-badge" class="p-3 rounded-xl font-bold text-sm"></div>
+                        <p id="recommendation-text" class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            ---
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Print & Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t no-print">
+                    <button onclick="window.print()" 
+                        class="flex-1 bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-solid fa-print"></i>
+                        <span>طباعة التقرير / حفظ كـ PDF</span>
+                    </button>
+                    <button onclick="restartQuiz()" 
+                        class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>إعادة المراجعة مرة أخرى</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-4xl mx-auto w-full mt-6 text-center text-xs text-slate-500 space-y-1 no-print">
+        <p>تم الإعداد وفق خطة تحسين نواتج التعلم لاختبارات القدرات العامة (القسم اللفظي) • معلمة المادة</p>
+        <p class="font-semibold text-slate-600">الثانوية التاسعة والعشرون بالمدينة المنورة © 2026</p>
+    </footer>
+
+    <!-- Quiz Logic & Questions Data JS -->
+    <script>
+        // Questions Data Extracted directly from the provided Question Bank Document
+        const quizQuestions = [
+            {
+                category: "التناظر اللفظي",
+                question: "وادي : صحراء",
+                options: [
+                    "أ. ماء : نهر",
+                    "ب. طبيب : سماعة",
+                    "ج. شاحنة : سيارة",
+                    "د. مكحلة : عين"
+                ],
+                answer: 0, // أ
+                explanation: "العلاقة: (مكانية وتواجدية)، فالوادي يتواجد في الصحراء والماء يتواجد في النهر."
+            },
+            {
+                category: "التناظر اللفظي",
+                question: "نزاهة : انحطاط",
+                options: [
+                    "أ. فرح : سعادة",
+                    "ب. إصرار : توفيق",
+                    "ج. كرم : بخل",
+                    "د. خير : مطر"
+                ],
+                answer: 2, // ج
+                explanation: "العلاقة: (تضاد)، فالنزاهة عكسها الانحطاط، والكرم عكسه البخل."
+            },
+            {
+                category: "التناظر اللفظي",
+                question: "حائك : خياطة",
+                options: [
+                    "أ. قاضي : محكمة",
+                    "ب. صائغ : سلسال",
+                    "ج. تربية : معلم",
+                    "د. فنان : رسم"
+                ],
+                answer: 3, // د
+                explanation: "العلاقة: (وظيفة وصاحبها / مهنة وحرفتها)، الحائك مهنته الخياطة، والفنان مهنته الرسم."
+            },
+            {
+                category: "إكمال الجمل",
+                question: "أن تكون عزيزًا وتموت من الجوع، خير من أن تكون عبدًا وأنت .......",
+                options: [
+                    "أ. متخم",
+                    "ب. مفلس",
+                    "ج. طماع",
+                    "د. غني"
+                ],
+                answer: 0, // أ
+                explanation: "الكلمة الصحيحة هي (متخم) تكتمل بها حكمة المعنى المقابل للجوع والعزة."
+            },
+            {
+                category: "إكمال الجمل",
+                question: "إذا أمكنك توصيل فكرتك في ....... لا تجعلها في .........",
+                options: [
+                    "أ. كلمة - صفحة",
+                    "ب. كتاب - صفحات",
+                    "ج. جملة - حروف",
+                    "د. نص - كلمة"
+                ],
+                answer: 0, // أ
+                explanation: "المعنى البلاغي الحث على الإيجاز الاختصار: إذا أمكن التعبير بكلمة فلا داعي لصفحة."
+            },
+            {
+                category: "إكمال الجمل",
+                question: "التحفيز من ....... السعادة، فالناجح دائماً ........",
+                options: [
+                    "أ. أسرار - منشرح",
+                    "ب. أسباب - ثابت",
+                    "ج. نتائج - قلق",
+                    "د. أهداف - متعب"
+                ],
+                answer: 0, // أ
+                explanation: "التحفيز أسلوب رئيسي للسعادة، والشخص الناجح دائم الانشراح والرضا."
+            },
+            {
+                category: "الخطأ السياقي",
+                question: "من الكلام كلام لا ترجو ضره و تخشى عاقبته فلا تنشره فإنه الداء العضال.",
+                options: [
+                    "أ. الكلام",
+                    "ب. ضره",
+                    "ج. عاقبته",
+                    "د. العضال"
+                ],
+                answer: 1, // ب (ضره)
+                explanation: "الكلمة الخاطئة هي (ضره)، والتصويب: لا ترجو (نفعه) وتخشى عاقبته."
+            },
+            {
+                category: "الخطأ السياقي",
+                question: "يظن الكثير بأن الاعتراف بالخطأ هزيمة، ولكن هي قوة تنجز بها قدرك عند الناس.",
+                options: [
+                    "أ. يظن",
+                    "ب. الكثير",
+                    "ج. هزيمة",
+                    "د. تنجز"
+                ],
+                answer: 3, // د (تنجز)
+                explanation: "الكلمة الخاطئة سياقياً هي (تنجز)، والتصويب: (ترفع) بها قدرك عند الناس."
+            },
+            {
+                category: "المفردة الشاذة",
+                question: "حدد المفردة الشاذة المختلفة عن بقية المجموعات التالية:",
+                options: [
+                    "أ. عقاب",
+                    "ب. نسر",
+                    "ج. صقر",
+                    "د. نعامة"
+                ],
+                answer: 3, // د
+                explanation: "النعامة هي الكلمة الشاذة لأنها طائر لا يطير، بينما العقاب والنسر والصقر طيور جوارح تطير."
+            },
+            {
+                category: "المفردة الشاذة",
+                question: "حدد المفردة الشاذة المختلفة في المفاهيم التالية:",
+                options: [
+                    "أ. عود",
+                    "ب. ريحان",
+                    "ج. زهرة",
+                    "د. وردة"
+                ],
+                answer: 0, // أ
+                explanation: "العود يختلف عن بقية الخيارات (الريحان، الزهرة، الوردة) التي تمثل نباتات وأزهار طبيعية عطرية فواحة."
+            }
+        ];
+
+        // Global State Variables
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timerInterval = null;
+        let secondsElapsed = 0;
+        let studentName = "";
+        let categoryScores = {
+            "التناظر اللفظي": { correct: 0, total: 3 },
+            "إكمال الجمل": { correct: 0, total: 3 },
+            "الخطأ السياقي": { correct: 0, total: 2 },
+            "المفردة الشاذة": { correct: 0, total: 2 }
+        };
+        let selectedAnswers = [];
+
+        // App Initialization
+        document.getElementById('report-date').innerText = new Date().toLocaleDateString('ar-SA');
+
+        function startTimer() {
+            secondsElapsed = 0;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+                const secs = String(secondsElapsed % 60).padStart(2, '0');
+                document.getElementById('timer-display').innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function startQuiz() {
+            const input = document.getElementById('student-name');
+            const errorMsg = document.getElementById('name-error');
+
+            if (!input.value.trim()) {
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+            errorMsg.classList.add('hidden');
+            studentName = input.value.trim();
+
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+
+            startTimer();
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = quizQuestions[currentQuestionIndex];
+            
+            // Update UI elements
+            document.getElementById('question-tracker').innerText = `السؤال ${currentQuestionIndex + 1} من ${quizQuestions.length}`;
+            document.getElementById('category-badge').innerText = q.category;
+            document.getElementById('question-text').innerText = q.question;
+            document.getElementById('progress-bar').style.width = `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%`;
+            
+            // Reset Explanation & Next button
+            const expBox = document.getElementById('explanation-box');
+            expBox.classList.add('hidden');
+            
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.disabled = true;
+            nextBtn.className = "bg-slate-300 text-slate-500 cursor-not-allowed font-bold py-2.5 px-6 rounded-xl transition duration-200 flex items-center gap-2 text-sm";
+
+            // Render Options
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((optText, index) => {
+                const btn = document.createElement('button');
+                btn.className = "option-btn w-full text-right p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 font-bold text-slate-700 text-sm flex items-center justify-between";
+                btn.innerHTML = `<span>${optText}</span><i class="fa-regular fa-circle text-slate-300"></i>`;
+                btn.onclick = () => selectOption(index);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex) {
+            const q = quizQuestions[currentQuestionIndex];
+            const container = document.getElementById('options-container');
+            const buttons = container.querySelectorAll('button');
+
+            // Disable all options after click
+            buttons.forEach(btn => btn.disabled = true);
+
+            const isCorrect = selectedIndex === q.answer;
+            selectedAnswers.push({ question: q.question, selected: selectedIndex, correct: q.answer, isCorrect });
+
+            if (isCorrect) {
+                score++;
+                categoryScores[q.category].correct++;
+                document.getElementById('current-score').innerText = score;
+                
+                // Style selected button
+                buttons[selectedIndex].className = "option-btn w-full text-right p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-sm flex items-center justify-between";
+                buttons[selectedIndex].querySelector('i').className = "fa-solid fa-circle-check text-emerald-600 text-lg";
+                
+                showExplanation(true, q.explanation);
+            } else {
+                // Style selected wrong button
+                buttons[selectedIndex].className = "option-btn w-full text-right p-4 rounded-xl border-2 border-rose-500 bg-rose-50 text-rose-900 font-bold text-sm flex items-center justify-between";
+                buttons[selectedIndex].querySelector('i').className = "fa-solid fa-circle-xmark text-rose-600 text-lg";
+
+                // Highlight correct answer
+                buttons[q.answer].className = "option-btn w-full text-right p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold text-sm flex items-center justify-between";
+                buttons[q.answer].querySelector('i').className = "fa-solid fa-circle-check text-emerald-600 text-lg";
+
+                showExplanation(false, q.explanation);
+            }
+
+            // Enable Next Button
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.disabled = false;
+            nextBtn.className = "bg-gradient-to-r from-teal-600 to-indigo-600 hover:from-teal-700 hover:to-indigo-700 text-white font-bold py-2.5 px-6 rounded-xl shadow-md transition duration-200 flex items-center gap-2 text-sm";
+        }
+
+        function showExplanation(isCorrect, explanationText) {
+            const expBox = document.getElementById('explanation-box');
+            const expHeader = document.getElementById('explanation-header');
+            const expIcon = document.getElementById('explanation-icon');
+            const expText = document.getElementById('explanation-text');
+
+            expBox.classList.remove('hidden');
+
+            if (isCorrect) {
+                expBox.className = "rounded-xl p-4 border bg-emerald-50 border-emerald-200 text-emerald-900 text-sm space-y-1";
+                expHeader.innerText = "إجابة صحيحة - أحسنتِ!";
+                expIcon.className = "fa-solid fa-circle-check text-emerald-600";
+            } else {
+                expBox.className = "rounded-xl p-4 border bg-rose-50 border-rose-200 text-rose-900 text-sm space-y-1";
+                expHeader.innerText = "إجابة خاطئة - توضيح الإجابة الصحيحة:";
+                expIcon.className = "fa-solid fa-triangle-exclamation text-rose-600";
+            }
+
+            expText.innerText = explanationText;
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizQuestions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            stopTimer();
+
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            // Populate Report Details
+            document.getElementById('res-student-name').innerText = studentName;
+            document.getElementById('res-score').innerText = `${score} / ${quizQuestions.length}`;
+            
+            const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+            const secs = String(secondsElapsed % 60).padStart(2, '0');
+            document.getElementById('res-time').innerText = `${mins}:${secs}`;
+
+            // Evaluation Badge & Recommendation
+            const percentage = (score / quizQuestions.length) * 100;
+            const badge = document.getElementById('evaluation-badge');
+            const rec = document.getElementById('recommendation-text');
+
+            if (percentage >= 90) {
+                badge.className = "p-3 rounded-xl font-bold text-sm bg-emerald-100 text-emerald-800 border border-emerald-300";
+                badge.innerText = "ممتازة ومبدعة! مستوى متقدم جداً 🌟";
+                rec.innerText = "أظهرتِ استيعاباً رائعاً لمهارات القسم اللفظي واستراتيجيات الحل السريع. استمري في حل الاختبارات المحاكية لضمان الدرجة العالية بإذن الله.";
+            } else if (percentage >= 70) {
+                badge.className = "p-3 rounded-xl font-bold text-sm bg-blue-100 text-blue-800 border border-blue-300";
+                badge.innerText = "جيد جداً! مستوى جيد وقابل للتحسن 👏";
+                rec.innerText = "أداؤكِ طيب، يُنصح بمراجعة المهارات التي تم الخطأ فيها والتركيز على مفردات الخطأ السياقي والتناظر اللفظي لرفع النتيجة للأفضل.";
+            } else {
+                badge.className = "p-3 rounded-xl font-bold text-sm bg-amber-100 text-amber-800 border border-amber-300";
+                badge.innerText = "تحتاجين إلى إثراء ودعم مهارات إضافي 💪";
+                rec.innerText = "ننصح بالاستفادة من أوراق العمل العلاجية المخصصة واستخدام بوتات المحاكاة للتدريب المكثف على تفكيك العلاقات اللفظية وسياق الجمل.";
+            }
+
+            // Render Chart
+            renderChart();
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            
+            const labels = Object.keys(categoryScores);
+            const dataScores = labels.map(key => {
+                const cat = categoryScores[key];
+                return Math.round((cat.correct / cat.total) * 100);
+            });
+
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'نسبة الإتقان %',
+                        data: dataScores,
+                        backgroundColor: 'rgba(13, 148, 136, 0.2)',
+                        borderColor: 'rgba(13, 148, 136, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(99, 102, 241, 1)',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e2e8f0' },
+                            grid: { color: '#e2e8f0' },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            ticks: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            selectedAnswers = [];
+            categoryScores = {
+                "التناظر اللفظي": { correct: 0, total: 3 },
+                "إكمال الجمل": { correct: 0, total: 3 },
+                "الخطأ السياقي": { correct: 0, total: 2 },
+                "المفردة الشاذة": { correct: 0, total: 2 }
+            };
+            document.getElementById('current-score').innerText = '0';
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
